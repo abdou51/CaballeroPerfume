@@ -6,6 +6,7 @@ const userJwt = require("../middlewares/userJwt");
 // Define routes
 
 router.post("/", userJwt,categoryController.createCategory);
+router.get("/", categoryController.getCategories);
 router.put("/:id", userJwt,categoryController.updateCategory);
 router.delete("/:id", userJwt,categoryController.deleteCategory);
 

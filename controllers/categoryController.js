@@ -19,7 +19,7 @@ const updateCategory = async (req, res) => {
     const updatedCategory = await Category.findByIdAndUpdate(
       categoryId,
       req.body,
-      { new: true } // Return the modified document rather than the original.
+      { new: true }
     );
 
     if (!updatedCategory) {
@@ -45,10 +45,19 @@ const deleteCategory = async (req, res) => {
     res.status(500).json({ error: "Error deleting Category" });
   }
 };
+const getCategories = async (req, res) => {
+  try {
+    const categories = await Category.find({});
+    res.status(200).json(categories);
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching Categories" });
+  }
+};
 
 
 module.exports = {
   createCategory,
   updateCategory,
-  deleteCategory
+  deleteCategory,
+  getCategories
 };
