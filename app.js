@@ -25,12 +25,14 @@ app.use(morgan("tiny"));
 const userRoutes = require("./routes/userRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const productRoutes = require("./routes/productRoutes");
+const wilayaRoutes = require("./routes/wilayaRoutes");
 
 const api = process.env.API_URL;
 
 app.use("/users", userRoutes);
 app.use("/categories", categoryRoutes);
 app.use("/products", productRoutes);
+app.use("/wilayas", wilayaRoutes);
 // Handle 404 errors
 app.use((req, res, next) => {
   res.status(404).json({ message: "Route not found" });
