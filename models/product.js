@@ -10,6 +10,10 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    isFeatured: {
+      type: Boolean,
+      default: false,
+    },
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
@@ -53,7 +57,12 @@ const productSchema = new mongoose.Schema(
   },
   { timestamps: true, versionKey: false }
 );
-
+productSchema.virtual("ObjectId").get(function () {
+  return this._id.toHexString();
+});
+productSchema.set("toJSON", {
+  virtuals: true,
+});
 const Product = mongoose.model("Product", productSchema);
 
 module.exports = Product;

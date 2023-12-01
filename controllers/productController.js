@@ -63,10 +63,23 @@ const deleteProduct = async (req, res) => {
     res.status(500).json({ error: "Error deleting Product" });
   }
 };
+const getOneProduct = async (req, res) => {
+  const productId = req.params.id;
+  try {
+    const product = await Product.findById(productId).populate("category");
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({ error: "Error getting Product" });
+  }
+};
 
 module.exports = {
   createProduct,
   getAllProducts,
   updateProduct,
   deleteProduct,
+  getOneProduct,
 };
