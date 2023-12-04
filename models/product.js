@@ -27,10 +27,12 @@ const productSchema = new mongoose.Schema(
       enum: ["Men", "Women", "Unisex"],
     },
     image1: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "File",
     },
     image2: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "File",
     },
     descriptions: [
       {
@@ -57,12 +59,6 @@ const productSchema = new mongoose.Schema(
   },
   { timestamps: true, versionKey: false }
 );
-productSchema.virtual("ObjectId").get(function () {
-  return this._id.toHexString();
-});
-productSchema.set("toJSON", {
-  virtuals: true,
-});
 const Product = mongoose.model("Product", productSchema);
 
 module.exports = Product;
