@@ -21,10 +21,10 @@ const getAllProducts = async (req, res) => {
 
     const baseUrl = `${req.protocol}://${req.get("host")}/`;
     const productsWithFullUrls = products.map((product) => {
-      if (product.image1) {
+      if (product.image1 && !product.image1.url.startsWith("http")) {
         product.image1.url = baseUrl + product.image1.url;
       }
-      if (product.image2) {
+      if (product.image2 && !product.image2.url.startsWith("http")) {
         product.image2.url = baseUrl + product.image2.url;
       }
       return product;
@@ -33,7 +33,7 @@ const getAllProducts = async (req, res) => {
     res.json(productsWithFullUrls);
   } catch (err) {
     console.error(err);
-    res.status(500).send("Error retrieving Clients.");
+    res.status(500).send("Error retrieving Products.");
   }
 };
 
