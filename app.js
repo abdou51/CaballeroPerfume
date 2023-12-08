@@ -27,6 +27,7 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const productRoutes = require("./routes/productRoutes");
 const wilayaRoutes = require("./routes/wilayaRoutes");
 const fileRoutes = require("./routes/fileRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 
 const api = process.env.API_URL;
 
@@ -35,7 +36,9 @@ app.use("/categories", categoryRoutes);
 app.use("/products", productRoutes);
 app.use("/wilayas", wilayaRoutes);
 app.use("/upload", fileRoutes);
+app.use("/orders", orderRoutes);
 app.use("/uploads", express.static("uploads"));
+
 // Handle 404 errors
 app.use((req, res, next) => {
   res.status(404).json({ message: "Route not found" });

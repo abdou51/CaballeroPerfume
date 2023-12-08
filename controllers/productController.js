@@ -48,7 +48,7 @@ const updateProduct = async (req, res) => {
       {
         new: true,
       }
-    );
+    ).populate("category");
 
     if (!updatedProduct) {
       return res.status(404).json({
