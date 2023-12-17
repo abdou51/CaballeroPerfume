@@ -14,13 +14,22 @@ const createProduct = async (req, res) => {
 };
 const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find()
-      .populate("category")
-      .populate("image1")
-      .populate("image2");
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const options = {
+      page,
+      limit,
+      populate: ["category", "image1", "image2"],
+    };
+
+    const { docs, totalDocs, totalPages } = await Product.paginate(
+      { isDrafted: false },
+      options
+    );
 
     const baseUrl = `${req.protocol}://${req.get("host")}/`;
-    const productsWithFullUrls = products.map((product) => {
+    const productsWithFullUrls = docs.map((product) => {
       if (product.image1 && !product.image1.url.startsWith("http")) {
         product.image1.url = baseUrl + product.image1.url;
       }
@@ -30,7 +39,12 @@ const getAllProducts = async (req, res) => {
       return product;
     });
 
-    res.json(productsWithFullUrls);
+    res.json({
+      products: productsWithFullUrls,
+      currentPage: page,
+      totalPages,
+      totalProducts: totalDocs,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send("Error retrieving Products.");

@@ -19,13 +19,16 @@ const getOrders = async (req, res) => {
   try {
     let query;
 
-    if (userRole === "admin") {
+    if (userRole === "Admin") {
       query = Order.find({ isConfirmed: true });
     } else {
       query = Order.find({ isConfirmed: false });
     }
 
-    const orders = await query.populate("orderItems.product", "name");
+    const orders = await query
+      .sort({ createdAt: -1 })
+      .populate("orderItems.product", "name");
+
     res.json(orders);
   } catch (error) {
     res.status(500).json({ error: "Error getting Orders" });
@@ -49,8 +52,23 @@ const updateOrder = async (req, res) => {
     res.status(500).json({ error: "Error updating Order" });
   }
 };
+const deleteOrder = async (req, res) => {
+  const orderId = req.params.id;
+  try {
+    const deletedOrder = await Order.findByIdAndDelete(orderId);
+
+    if (!deletedOrder) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    res.status(200).json({ message: "Order deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Error deleting Order" });
+  }
+};
 module.exports = {
   createOrder,
   getOrders,
   updateOrder,
+  deleteOrder,
 };
